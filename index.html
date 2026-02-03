@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Daily Expense Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+margin:0;
+font-family:Segoe UI, sans-serif;
+background:linear-gradient(135deg,#43cea2,#185a9d);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center
+}
+.container{
+background:#fff;
+width:420px;
+border-radius:16px;
+padding:25px;
+box-shadow:0 12px 30px rgba(0,0,0,.2)
+}
+h2{
+text-align:center;
+color:#185a9d;
+margin-bottom:20px
+}
+input,select,button{
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:15px
+}
+button{
+background:#43cea2;
+color:#fff;
+font-weight:600;
+cursor:pointer;
+border:none
+}
+button:hover{
+background:#2bbf94
+}
+.list{
+margin-top:20px
+}
+.item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+margin-bottom:10px;
+border-radius:10px;
+background:#f4f7fb;
+animation:fade .4s ease
+}
+.item span{
+font-size:14px
+}
+.item button{
+width:auto;
+padding:6px 10px;
+background:#ff5252
+}
+.item button:hover{
+background:#e53935
+}
+.total{
+margin-top:15px;
+padding:12px;
+background:#185a9d;
+color:#fff;
+border-radius:10px;
+text-align:center;
+font-size:18px;
+font-weight:600
+}
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>Daily Expense Tracker</h2>
+
+<input type="text" id="name" placeholder="Expense description">
+<input type="number" id="amount" placeholder="Amount">
+<select id="category">
+<option value="">Select Category</option>
+<option>Food</option>
+<option>Travel</option>
+<option>Shopping</option>
+<option>Bills</option>
+</select>
+
+<button onclick="addExpense()">Add Expense</button>
+
+<div class="list" id="list"></div>
+
+<div class="total">Total: ₹ <span id="total">0</span></div>
+</div>
+
+<script>
+let expenses=[]
+let total=0
+
+function addExpense(){
+let name=document.getElementById("name").value
+let amount=Number(document.getElementById("amount").value)
+let category=document.getElementById("category").value
+if(name===""||amount<=0||category==="") return
+expenses.push({name,amount,category})
+total+=amount
+render()
+document.getElementById("name").value=""
+document.getElementById("amount").value=""
+document.getElementById("category").value=""
+}
+
+function deleteExpense(index){
+total-=expenses[index].amount
+expenses.splice(index,1)
+render()
+}
+
+function render(){
+let list=document.getElementById("list")
+list.innerHTML=""
+expenses.forEach((e,i)=>{
+list.innerHTML+=`
+<div class="item">
+<span>${e.name} (${e.category})</span>
+<span>₹ ${e.amount}</span>
+<button onclick="deleteExpense(${i})">X</button>
+</div>`
+})
+document.getElementById("total").innerText=total
+}
+</script>
+
+</body>
+</html>
+
